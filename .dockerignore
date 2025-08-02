@@ -1,0 +1,7 @@
+.git/
+.gitignore
+Dockerfile.jenkins
+docker-compose.yml
+.dockerignore
+jenkins_home/
+README.md

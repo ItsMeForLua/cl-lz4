@@ -1,0 +1,13 @@
+*.fasl
+*.fas
+*.x86f
+*.lx64f
+.qlot/
+.roswell/
+jenkins_home/
+*~
+#*#
+.#*
+*.log
+.DS_Store
+Thumbs.db
