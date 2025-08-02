@@ -3,9 +3,6 @@
 (in-package #:cl-lz4)
 
 (defun compress (input-data)
-  "High-level LZ4 compression for various data types.
-   Accepts a string or a byte-vector.
-   Returns a (vector (unsigned-byte 8))."
   (let ((byte-vector
           (etypecase input-data
             (string (string-to-bytes-fast input-data))
@@ -16,12 +13,10 @@
     (compress-block-optimized byte-vector)))
 
 (defun compress-block (input-data &key (start 0) (end (length input-data)))
-  "A convenience wrapper for the default optimized block compressor."
   (compress-block-optimized input-data :start start :end end))
 
 (declaim (inline hash-sequence-fast))
 (defun hash-sequence-fast (sequence)
-  "Optimized hash function with better avalanche properties."
   (declare (type (unsigned-byte 32) sequence)
            (optimize (speed 3) (safety 0)))
   (let* ((h32 (ldb (byte 32 0) (* sequence +hash-magic+)))
@@ -105,7 +100,7 @@
     (push table *hash-table-pool*)))
 
 (defun compress-block-preallocated (input-data output-buffer hash-table &key (start 0) (end (length input-data)))
-  "Expert-level: Compresses into a pre-allocated buffer with a pre-allocated hash-table.
+  "Compresses into a pre-allocated buffer with a pre-allocated hash-table.
    Returns the number of bytes written. No allocations, no safety checks."
   (declare (type (simple-array (unsigned-byte 8) (*)) input-data)
            (type (vector (unsigned-byte 8)) output-buffer)
@@ -208,7 +203,7 @@
       (return-pooled-buffer output-buffer))))
 
 (defun compress-block-unsafe (input-data &key (start 0) (end (length input-data)))
-  "Ultra-fast LZ4 compression with minimal safety checks. Allocates its own buffers."
+  "LZ4 compression with minimal safety checks. Allocates its own buffers."
   (declare (type (simple-array (unsigned-byte 8) (*)) input-data)
            (type fixnum start end)
            (optimize (speed 3) (safety 0) (debug 0)))
